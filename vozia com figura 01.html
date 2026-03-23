@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vozia Care - Comunicador Visual</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #1f2937;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2b6cb0, #4c51bf);
+      color: white;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      padding: 14px;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .top-actions button,
+    .top-actions select,
+    .top-actions input {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .top-actions button {
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      min-height: 48px;
+    }
+
+    .top-actions button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .top-actions button.danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .top-actions select,
+    .top-actions input {
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      cursor: auto;
+    }
+
+    .spoken-bar {
+      max-width: 1100px;
+      margin: 18px auto 8px;
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .spoken-title {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 8px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .spoken-text {
+      min-height: 72px;
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 1.3;
+      color: #111827;
+    }
+
+    .category-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 12px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .category-btn {
+      background: white;
+      color: #111827;
+      border: 2px solid #dbeafe;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .category-btn.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    .grid {
+      max-width: 1100px;
+      margin: 18px auto 30px;
+      padding: 0 12px 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.07);
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      user-select: none;
+    }
+
+    .card:hover,
+    .card:active {
+      transform: scale(1.02);
+      border-color: #93c5fd;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.1);
+    }
+
+    .icon-box {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      background: #eff6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .icon-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 10px;
+    }
+
+    .card-title {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .card-label {
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+
+    .card-sub {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+      padding: 16px 20px 28px;
+    }
+
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 16px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 560px;
+      background: white;
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.22);
+    }
+
+    .modal h2 {
+      margin-bottom: 14px;
+      font-size: 24px;
+    }
+
+    .modal label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .modal input,
+    .modal select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      font-size: 16px;
+    }
+
+    .modal .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .modal .actions button {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      background: #16a34a;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .info-box {
+      max-width: 1100px;
+      margin: 10px auto 0;
+      padding: 0 12px;
+    }
+
+    .info-inner {
+      background: #ecfeff;
+      color: #0f172a;
+      border: 1px solid #a5f3fc;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-size: 15px;
+    }
+
+    @media (max-width: 700px) {
+      .spoken-text {
+        font-size: 22px;
+      }
+
+      .card {
+        min-height: 190px;
+      }
+
+      .card-label {
+        font-size: 19px;
+      }
+
+      .icon-box {
+        width: 82px;
+        height: 82px;
+        font-size: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vozia Care</h1>
+    <p>Comunicador visual com figuras e voz</p>
+  </header>
+
+  <div class="top-actions">
+    <button onclick="speakMessage()">🔊 Falar frase</button>
+    <button class="secondary" onclick="clearMessage()">🧹 Limpar</button>
+    <button class="secondary" onclick="toggleCaretakerMode()">⚙️ Modo cuidador</button>
+
+    <select id="voiceSelect"></select>
+    <input id="patientName" type="text" placeholder="Nome do paciente" />
+  </div>
+
+  <div class="spoken-bar">
+    <div class="spoken-title">Mensagem montada</div>
+    <div class="spoken-text" id="spokenText">Toque em uma figura para começar.</div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-inner">
+      Dica: no modo cuidador, você pode editar cada cartão. Pode trocar o emoji, a frase falada e a categoria.
+    </div>
+  </div>
+
+  <div class="category-wrap" id="categoryWrap"></div>
+
+  <main class="grid" id="grid"></main>
+
+  <div class="footer-note">
+    Versão inicial pronta para teste com pacientes. Depois você pode trocar os emojis por imagens reais.
+  </div>
+
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <h2>Editar cartão</h2>
+
+      <label for="editLabel">Texto visível</label>
+      <input id="editLabel" type="text" />
+
+      <label for="editSpeak">Frase falada</label>
+      <input id="editSpeak" type="text" />
+
+      <label for="editIcon">Emoji ou símbolo</label>
+      <input id="editIcon" type="text" />
+
+      <label for="editImage">URL da imagem (opcional)</label>
+      <input id="editImage" type="text" placeholder="https://..." />
+
+      <label for="editCategory">Categoria</label>
+      <select id="editCategory">
+        <option value="Necessidades">Necessidades</option>
+        <option value="Dor e sintomas">Dor e sintomas</option>
+        <option value="Conforto">Conforto</option>
+        <option value="Emoções">Emoções</option>
+        <option value="Cuidador">Cuidador</option>
+      </select>
+
+      <div class="actions">
+        <button class="save-btn" onclick="saveEdit()">Salvar</button>
+        <button class="cancel-btn" onclick="closeModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const defaultCards = [
+      { id: 1, label: "Água", speak: "Quero beber água", icon: "💧", image: "", category: "Necessidades" },
+      { id: 2, label: "Comer", speak: "Quero comer", icon: "🍽️", image: "", category: "Necessidades" },
+      { id: 3, label: "Banheiro", speak: "Quero ir ao banheiro", icon: "🚽", image: "", category: "Necessidades" },
+      { id: 4, label: "Dormir", speak: "Quero dormir", icon: "😴", image: "", category: "Necessidades" },
+      { id: 5, label: "Dor", speak: "Estou com dor", icon: "😖", image: "", category: "Dor e sintomas" },
+      { id: 6, label: "Falta de ar", speak: "Estou com falta de ar", icon: "😮‍💨", image: "", category: "Dor e sintomas" },
+      { id: 7, label: "Náusea", speak: "Estou com enjoo", icon: "🤢", image: "", category: "Dor e sintomas" },
+      { id: 8, label: "Tontura", speak: "Estou com tontura", icon: "😵", image: "", category: "Dor e sintomas" },
+      { id: 9, label: "Frio", speak: "Estou com frio", icon: "🥶", image: "", category: "Conforto" },
+      { id: 10, label: "Calor", speak: "Estou com calor", icon: "🥵", image: "", category: "Conforto" },
+      { id: 11, label: "Virar", speak: "Quero mudar de posição", icon: "↩️", image: "", category: "Conforto" },
+      { id: 12, label: "Cobertor", speak: "Quero cobertor", icon: "🛏️", image: "", category: "Conforto" },
+      { id: 13, label: "Triste", speak: "Estou triste", icon: "😢", image: "", category: "Emoções" },
+      { id: 14, label: "Ansioso", speak: "Estou ansioso", icon: "😰", image: "", category: "Emoções" },
+      { id: 15, label: "Bem", speak: "Estou bem", icon: "🙂", image: "", category: "Emoções" },
+      { id: 16, label: "Feliz", speak: "Estou feliz", icon: "😄", image: "", category: "Emoções" },
+      { id: 17, label: "Ajuda", speak: "Preciso de ajuda", icon: "🆘", image: "", category: "Cuidador" },
+      { id: 18, label: "Chamar", speak: "Chame alguém para mim", icon: "📢", image: "", category: "Cuidador" },
+      { id: 19, label: "Família", speak: "Quero ver minha família", icon: "👨‍👩‍👧", image: "", category: "Cuidador" },
+      { id: 20, label: "Médico", speak: "Quero falar com o médico", icon: "🩺", image: "", category: "Cuidador" }
+    ];
+
+    let cards = JSON.parse(localStorage.getItem("vozia_cards")) || defaultCards;
+    let currentMessage = [];
+    let caretakerMode = false;
+    let currentCategory = "Todas";
+    let editingId = null;
+    let voices = [];
+
+    const grid = document.getElementById("grid");
+    const spokenText = document.getElementById("spokenText");
+    const categoryWrap = document.getElementById("categoryWrap");
+    const voiceSelect = document.getElementById("voiceSelect");
+    const patientName = document.getElementById("patientName");
+
+    patientName.value = localStorage.getItem("vozia_patient_name") || "";
+
+    patientName.addEventListener("input", () => {
+      localStorage.setItem("vozia_patient_name", patientName.value);
+    });
+
+    function saveCards() {
+      localStorage.setItem("vozia_cards", JSON.stringify(cards));
+    }
+
+    function renderCategories() {
+      const cats = ["Todas", ...new Set(cards.map(c => c.category))];
+      categoryWrap.innerHTML = "";
+
+      cats.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.className = "category-btn" + (cat === currentCategory ? " active" : "");
+        btn.textContent = cat;
+        btn.onclick = () => {
+          currentCategory = cat;
+          renderCategories();
+          renderCards();
+        };
+        categoryWrap.appendChild(btn);
+      });
+    }
+
+    function renderCards() {
+      grid.innerHTML = "";
+      const filtered = currentCategory === "Todas"
+        ? cards
+        : cards.filter(card => card.category === currentCategory);
+
+      filtered.forEach(card => {
+        const div = document.createElement("div");
+        div.className = "card";
+
+        div.onclick = () => {
+          if (caretakerMode) {
+            openEdit(card.id);
+          } else {
+            addToMessage(card.speak);
+          }
+        };
+
+        const iconBox = document.createElement("div");
+        iconBox.className = "icon-box";
+
+        if (card.image && card.image.trim() !== "") {
+          const img = document.createElement("img");
+          img.src = card.image;
+          img.alt = card.label;
+          img.onerror = function () {
+            this.remove();
+            iconBox.textContent = card.icon || "❔";
+          };
+          iconBox.appendChild(img);
+        } else {
+          iconBox.textContent = card.icon || "❔";
+        }
+
+        const title = document.createElement("div");
+        title.className = "card-title";
+        title.textContent = card.icon && !card.image ? "" : "";
+
+        const label = document.createElement("div");
+        label.className = "card-label";
+        label.textContent = card.label;
+
+        const sub = document.createElement("div");
+        sub.className = "card-sub";
+        sub.textContent = caretakerMode ? "Toque para editar" : "Toque para falar";
+
+        div.appendChild(iconBox);
+        div.appendChild(label);
+        div.appendChild(sub);
+        grid.appendChild(div);
+      });
+    }
+
+    function addToMessage(text) {
+      currentMessage = [text];
+      spokenText.textContent = text;
+      speak(text);
+    }
+
+    function clearMessage() {
+      currentMessage = [];
+      spokenText.textContent = "Toque em uma figura para começar.";
+      window.speechSynthesis.cancel();
+    }
+
+    function speakMessage() {
+      if (!currentMessage.length) return;
+      speak(currentMessage.join(". "));
+    }
+
+    function speak(text) {
+      if (!("speechSynthesis" in window)) {
+        alert("Seu navegador não suporta fala automática.");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "pt-BR";
+
+      const selectedVoiceName = voiceSelect.value;
+      const selectedVoice = voices.find(v => v.name === selectedVoiceName);
+      if (selectedVoice) utter.voice = selectedVoice;
+
+      utter.rate = 0.95;
+      utter.pitch = 1;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function loadVoices() {
+      voices = window.speechSynthesis.getVoices();
+      const ptVoices = voices.filter(v => v.lang.toLowerCase().includes("pt"));
+
+      voiceSelect.innerHTML = "";
+      const list = ptVoices.length ? ptVoices : voices;
+
+      list.forEach(v => {
+        const option = document.createElement("option");
+        option.value = v.name;
+        option.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(option);
+      });
+
+      const savedVoice = localStorage.getItem("vozia_voice");
+      if (savedVoice) voiceSelect.value = savedVoice;
+
+      voiceSelect.onchange = () => {
+        localStorage.setItem("vozia_voice", voiceSelect.value);
+      };
+    }
+
+    function toggleCaretakerMode() {
+      caretakerMode = !caretakerMode;
+      alert(caretakerMode ? "Modo cuidador ativado." : "Modo cuidador desativado.");
+      renderCards();
+    }
+
+    function openEdit(id) {
+      editingId = id;
+      const card = cards.find(c => c.id === id);
+      if (!card) return;
+
+      document.getElementById("editLabel").value = card.label;
+      document.getElementById("editSpeak").value = card.speak;
+      document.getElementById("editIcon").value = card.icon;
+      document.getElementById("editImage").value = card.image || "";
+      document.getElementById("editCategory").value = card.category;
+      document.getElementById("modalBg").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modalBg").style.display = "none";
+      editingId = null;
+    }
+
+    function saveEdit() {
+      const card = cards.find(c => c.id === editingId);
+      if (!card) return;
+
+      card.label = document.getElementById("editLabel").value.trim() || card.label;
+      card.speak = document.getElementById("editSpeak").value.trim() || card.speak;
+      card.icon = document.getElementById("editIcon").value.trim() || "❔";
+      card.image = document.getElementById("editImage").value.trim();
+      card.category = document.getElementById("editCategory").value;
+
+      saveCards();
+      renderCategories();
+      renderCards();
+      closeModal();
+    }
+
+    window.onclick = function (e) {
+      const modalBg = document.getElementById("modalBg");
+      if (e.target === modalBg) closeModal();
+    };
+
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+    renderCategories();
+    renderCards();
+  </script>
+</body>
+</html>
